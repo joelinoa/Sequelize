@@ -25,18 +25,17 @@ async function MealTable() {
     const request = await fetch('/api/wholeMeal');
     const meals = await request.json();
     const meals1 = meals.data
-    console.log(meals.data)
     const mealArray = [1,2,3,4,5,6,7,8,9,10];
     const selected = mealArray.map((element) => {
         const rand = getRandomIntInclusive(0, meals1.length - 1);
         return meals1[rand];
     });
     console.table(selected);
-    return selected
-}
-
-async function ChartMaker() {
-    const table = MealTable()
+    const cholesterol = [];
+    const sodium = [];
+    const carbs = [];
+    const protein = [];
+    const fat = [];
     const chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         title:{
@@ -45,33 +44,41 @@ async function ChartMaker() {
         toolTip: {
             shared: true
         },
-        legend:{
-            cursor: "pointer",
-            itemclick: toggleDataSeries
-        },
 	    data: [{
 		    type: "stackedBar",
-		    name: "cholesterol",
-		    showInLegend: "true",
-		    dataPoints: [
-			    table.forEach((element) => {
-                   {x: element.meal_name, y: element.cholesterol} 
-                })
-		    ]
+            name: 'cholesterol',
+            dataPoints: cholesterol,
+	    }, 
+        {
+		    type: "stackedBar",
+            name: 'sodium',
+            dataPoints: sodium,
+	    },
+        {
+		    type: "stackedBar",
+            name: 'carbs',
+            dataPoints: carbs,
+	    },
+        {
+		    type: "stackedBar",
+            name: 'protein',
+            dataPoints: protein,
+	    },
+        {
+		    type: "stackedBar",
+            name: 'fat',
+            dataPoints: fat,
 	    }]
+
+    });
+    selected.forEach((element) => {
+        cholesterol.push({label: element.meal_name, y: element.cholesterol});
+        sodium.push({label: element.meal_name, y: element.sodium});
+        carbs.push({label: element.meal_name, y: element.carbs});
+        protein.push({label: element.meal_name, y: element.protein});
+        fat.push({label: element.meal_name, y: element.fat});
     });
     chart.render();
-    
-    function toggleDataSeries(e) {
-        if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-            e.dataSeries.visible = false;
-        }
-        else {
-            e.dataSeries.visible = true;
-        }
-        chart.render();
-    }
-    
 }
 
 async function WindowActions() {
