@@ -4,33 +4,19 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
 
-async function DiningHalls() {
-  const request = await fetch("/api/dining");
-  const dining = await request.json();
-  const dining1 = dining.data;
-  console.log(dining);
-
-  const dine = document.querySelector("#dininghalls");
-
-  dining1.forEach((element) => {
-    const appendItem = document.createElement("tr");
-    appendItem.innerHTML = `<th class='tbody'>${element.hall_id}</th>
-        <td class='tbody'>${element.hall_name}</td>
-        <td class='tbody'>${element.hall_address}</td>`;
-    dine.append(appendItem);
-  });
-}
-
 async function MealTable() {
     const request = await fetch('/api/wholeMeal');
     const meals = await request.json();
     const meals1 = meals.data
+    const meal = document.querySelector("#meals");
+
     const mealArray = [1,2,3,4,5,6,7,8,9,10];
     const selected = mealArray.map((element) => {
         const rand = getRandomIntInclusive(0, meals1.length - 1);
         return meals1[rand];
     });
     console.table(selected);
+
     const cholesterol = [];
     const sodium = [];
     const carbs = [];
@@ -39,7 +25,7 @@ async function MealTable() {
     const chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         title:{
-            text: "Meals and Macros"
+            text: "Meals and Macros Chart"
         },
         toolTip: {
             shared: true
@@ -77,12 +63,20 @@ async function MealTable() {
         carbs.push({label: element.meal_name, y: element.carbs});
         protein.push({label: element.meal_name, y: element.protein});
         fat.push({label: element.meal_name, y: element.fat});
+
+        const appendItem = document.createElement("tr");
+        appendItem.innerHTML = `<th class='tbody'>${element.meal_name}</th>
+        <td class='tbody'>${element.cholesterol}</td>
+        <td class='tbody'>${element.sodium}</td>
+        <td class='tbody'>${element.carbs}</td>
+        <td class='tbody'>${element.protein}</td>
+        <td class='tbody'>${element.fat}</td>`;
+        meal.append(appendItem);
     });
     chart.render();
 }
 
 async function WindowActions() {
-  await DiningHalls();
   await MealTable();
 }
 
