@@ -31,26 +31,31 @@ async function MealTable() {
             shared: true
         },
 	    data: [{
+            showInLegend: "true",
 		    type: "stackedBar",
             name: 'cholesterol',
             dataPoints: cholesterol,
 	    }, 
         {
+            showInLegend: "true",
 		    type: "stackedBar",
             name: 'sodium',
             dataPoints: sodium,
 	    },
         {
+            showInLegend: "true",
 		    type: "stackedBar",
             name: 'carbs',
             dataPoints: carbs,
 	    },
         {
+            showInLegend: "true",
 		    type: "stackedBar",
             name: 'protein',
             dataPoints: protein,
 	    },
         {
+            showInLegend: "true",
 		    type: "stackedBar",
             name: 'fat',
             dataPoints: fat,
